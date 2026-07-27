@@ -4,7 +4,7 @@
 Docker Compose 用の Minecraft Java Edition サーバー構成です。
 
 - Paper、Java、設定ファイルの取得処理を自作しない
-- `linux/amd64` を Dockerfile と Compose の両方で固定
+- `linux/amd64` を Compose で固定
 - Paper のデータを専用ボリュームに保存
 - Paper のバージョンとビルドを固定
 - EULA に明示的に同意するまで起動しない
@@ -24,10 +24,10 @@ cp .env.example .env
 EULA=TRUE
 ```
 
-ビルドして起動します。
+イメージを取得して起動します。
 
 ```sh
-docker compose build --pull
+docker compose pull
 docker compose up -d
 docker compose logs -f mc
 ```
@@ -68,7 +68,7 @@ Paper では Forge/Fabric の Mod ではなく、Bukkit/Paper 用プラグイン
 `MINECRAFT_VERSION` と `PAPER_BUILD` を更新してから、次を実行します。
 
 ```sh
-docker compose build --pull
+docker compose pull
 docker compose up -d
 docker compose logs -f mc
 ```
@@ -99,13 +99,13 @@ Compose ファイルを新しく作り、Paper とは別のデータボリュー
    CF_PAGE_URL: "<ModpackのページURL>"
    ```
 
-7. `BASE_IMAGE` を Modpack 指定の Java バージョンへ変更する
+7. `image` を Modpack 指定の Java バージョンへ変更する
 8. 公開ポートを Paper と同時起動するなら `25566:25565` などへ変更する
 9. `/data` には `paper-mc-data` を使わず、新しい名前付きボリュームを割り当てる
 10. EULA 同意後、別の Compose ファイルとして起動する
 
 ```sh
-docker compose -f compose.modpack.yaml build --pull
+docker compose -f compose.modpack.yaml pull
 docker compose -f compose.modpack.yaml up -d
 docker compose -f compose.modpack.yaml logs -f mc
 ```

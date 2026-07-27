@@ -2,12 +2,8 @@ name: paper-mc
 
 services:
   mc:
+    image: itzg/minecraft-server:2026.5.4-java25
     platform: linux/amd64
-    build:
-      context: .
-      args:
-        BASE_IMAGE: "${BASE_IMAGE:-itzg/minecraft-server:2026.5.4-java25}"
-    image: "${PAPER_IMAGE:-local/paper-mc:amd64}"
     restart: unless-stopped
     tty: true
     stdin_open: true
@@ -33,4 +29,3 @@ services:
 volumes:
   paper-data:
     name: paper-mc-data
-
