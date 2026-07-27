@@ -1,0 +1,4 @@
+.env
+paper-plugins/*.jar
+backups/
+secrets/*.txt

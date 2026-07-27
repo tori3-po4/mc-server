@@ -1,0 +1,36 @@
+name: paper-mc
+
+services:
+  mc:
+    platform: linux/amd64
+    build:
+      context: .
+      args:
+        BASE_IMAGE: "${BASE_IMAGE:-itzg/minecraft-server:2026.5.4-java25}"
+    image: "${PAPER_IMAGE:-local/paper-mc:amd64}"
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    stop_grace_period: 1m
+    ports:
+      - "${SERVER_PORT:-25565}:25565"
+    environment:
+      EULA: "${EULA:-FALSE}"
+      TYPE: PAPER
+      VERSION: "${MINECRAFT_VERSION:-26.1.2}"
+      PAPER_BUILD: "${PAPER_BUILD:-74}"
+      MEMORY: "${MEMORY:-4G}"
+      TZ: "${TZ:-Asia/Tokyo}"
+      MOTD: "${MOTD:-Paper server on Docker}"
+      MAX_PLAYERS: "${MAX_PLAYERS:-20}"
+      DIFFICULTY: "${DIFFICULTY:-normal}"
+      ONLINE_MODE: "${ONLINE_MODE:-TRUE}"
+      PLUGINS: /plugins
+    volumes:
+      - paper-data:/data
+      - ./paper-plugins:/plugins:ro
+
+volumes:
+  paper-data:
+    name: paper-mc-data
+
