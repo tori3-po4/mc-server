@@ -23,9 +23,7 @@ services:
       ONLINE_MODE: "${ONLINE_MODE:-TRUE}"
       PLUGINS: /plugins
     volumes:
-      - paper-data:/data
+      - type: bind
+        source: "${HOME}/srv/data"
+        target: /data
       - ./paper-plugins:/plugins:ro
-
-volumes:
-  paper-data:
-    name: paper-mc-data

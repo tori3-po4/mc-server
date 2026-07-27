@@ -5,7 +5,7 @@ Docker Compose 用の Minecraft Java Edition サーバー構成です。
 
 - Paper、Java、設定ファイルの取得処理を自作しない
 - `linux/amd64` を Compose で固定
-- Paper のデータを専用ボリュームに保存
+- Paper のデータをホームディレクトリ内の `~/srv/data/` に保存
 - Paper のバージョンとビルドを固定
 - EULA に明示的に同意するまで起動しない
 
@@ -46,8 +46,8 @@ docker compose exec mc rcon-cli list
 docker compose exec mc rcon-cli say Server maintenance starts soon
 ```
 
-サーバーデータは Docker ボリューム `paper-mc-data` に残ります。
-コンテナやローカルイメージを作り直しても、このボリュームを削除しない限りワールドは残ります。
+サーバーデータは `~/srv/data/` に残ります。
+コンテナを作り直しても、このディレクトリを削除しない限りワールドは残ります。
 
 ## Paper プラグイン
 
@@ -64,7 +64,7 @@ Paper では Forge/Fabric の Mod ではなく、Bukkit/Paper 用プラグイン
 ## Paper の更新
 
 現在の既定値は Paper `26.1.2` build `74` と Java 25 です。更新前には必ず
-`paper-mc-data` をバックアップしてください。`.env` の
+`~/srv/data/` をバックアップしてください。`.env` の
 `MINECRAFT_VERSION` と `PAPER_BUILD` を更新してから、次を実行します。
 
 ```sh
@@ -81,7 +81,7 @@ docker compose logs -f mc
 Paper に Forge/Fabric/NeoForge 用 Mod を追加することはできません。Modpack 専用の
 Compose ファイルを新しく作り、Paper とは別のデータボリュームで起動します。
 
-1. `paper-mc-data` をバックアップする
+1. `~/srv/data/` をバックアップする
 2. Modpack の配布ページで、Minecraft、Mod loader、Java の対応バージョンを確認する
 3. `compose.yaml` を `compose.modpack.yaml` などの別名でコピーする
 4. `TYPE`、`PAPER_BUILD`、`PLUGINS` を削除する
@@ -101,7 +101,7 @@ Compose ファイルを新しく作り、Paper とは別のデータボリュー
 
 7. `image` を Modpack 指定の Java バージョンへ変更する
 8. 公開ポートを Paper と同時起動するなら `25566:25565` などへ変更する
-9. `/data` には `paper-mc-data` を使わず、新しい名前付きボリュームを割り当てる
+9. Paper の `~/srv/data/` は共有せず、Modpack 用の別ディレクトリを `/data` に割り当てる
 10. EULA 同意後、別の Compose ファイルとして起動する
 
 ```sh
@@ -115,8 +115,7 @@ docker compose -f compose.modpack.yaml logs -f mc
 
 ## バックアップと移行
 
-アップデートの前にはサーバーを停止して、Docker ボリューム `paper-mc-data` を
-バックアップしてください。
+アップデートの前にはサーバーを停止して、`~/srv/data/` をバックアップしてください。
 
 ## 参考
 
