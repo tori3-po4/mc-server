@@ -49,6 +49,43 @@ docker compose exec mc rcon-cli say Server maintenance starts soon
 サーバーデータは `~/srv/data/` に残ります。
 コンテナを作り直しても、このディレクトリを削除しない限りワールドは残ります。
 
+## ワールドを切り替える
+
+使用するワールドは `.env` の `LEVEL` で選択します。既定値は次のとおりです。
+
+```dotenv
+LEVEL=world
+SEED=
+```
+
+新しいワールドへ切り替える場合は、サーバーを停止してから `LEVEL` を変更します。
+`SEED` は新規生成時だけ使用され、空欄の場合はランダムになります。
+
+```sh
+docker compose stop
+```
+
+```dotenv
+LEVEL=world2
+SEED=123456789
+```
+
+再度起動すると、次のディレクトリが新規生成されます。
+
+```text
+~/srv/data/world2/
+~/srv/data/world2_nether/
+~/srv/data/world2_the_end/
+```
+
+```sh
+docker compose up -d
+docker compose logs -f mc
+```
+
+以前のワールドは削除されません。戻す場合は `LEVEL=world` に変更して再起動します。
+ワールド名には英数字、ハイフン、アンダースコアの使用を推奨します。
+
 ## Paper プラグイン
 
 Paper では Forge/Fabric の Mod ではなく、Bukkit/Paper 用プラグインを使います。
