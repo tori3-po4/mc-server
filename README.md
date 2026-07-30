@@ -46,6 +46,48 @@ docker compose exec mc rcon-cli list
 docker compose exec mc rcon-cli say Server maintenance starts soon
 ```
 
+## OP権限を管理する
+
+OP（Operator）は、`/gamemode`、`/give`、`/tp`、`/difficulty`、`/ban`、
+`/stop`などの管理コマンドを使用できる権限です。信頼できるプレイヤーだけに付与してください。
+
+実行中のサーバーで、Minecraft Java Editionのプレイヤー名を指定して付与します。
+
+```sh
+docker compose exec mc rcon-cli op プレイヤー名
+```
+
+例:
+
+```sh
+docker compose exec mc rcon-cli op ToriyamaIori
+```
+
+解除する場合:
+
+```sh
+docker compose exec mc rcon-cli deop ToriyamaIori
+```
+
+付与情報は `~/srv/data/ops.json` に保存されるため、コンテナを再起動しても維持されます。
+OPを付与しても、ゲームモードは自動的にクリエイティブへ変わりません。
+また、プラグイン固有のコマンドには別の権限設定が必要な場合があります。
+
+現在の参加者を確認する場合:
+
+```sh
+docker compose exec mc rcon-cli list
+```
+
+全プレイヤーへメッセージを送る場合:
+
+```sh
+docker compose exec mc rcon-cli say "5分後にメンテナンスを開始します"
+```
+
+プレイヤー名のなりすましを防ぐため、特別な理由がなければ `.env` の
+`ONLINE_MODE=TRUE`を維持してください。
+
 サーバーデータは `~/srv/data/` に残ります。
 コンテナを作り直しても、このディレクトリを削除しない限りワールドは残ります。
 
